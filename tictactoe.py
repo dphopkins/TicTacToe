@@ -33,6 +33,8 @@ If there is more than one force, you lose. It doesn't matter what move you make 
 equally likely to result in a loss. So you lose at the beginning of your turn, two moves before 
 there are actually three in a row. This is checkmate.
 
+############################### check to see if two forces are the same space
+
 We're basically going to end up with a list of maybe 300,000 key-value pairs where key = winner/draw and value = list of moves
 """
 
@@ -123,6 +125,8 @@ def legal_moves():
 	pass
 
 def game(current, available, history, player):
+
+	# Check if game is over	
 	if len(available) == 0:
 		return "draw", history
 	elif checkmate():
@@ -132,15 +136,27 @@ def game(current, available, history, player):
 			winner = "X"
 		return winner, history
 	else:
+
+		# Get the set of all possible legal moves
 		legal = legal_moves()
 		for k in range(0,len(legal)):
-			current[legal[k]-1] = player
-			history.append(available.pop(k-1))
+			
+			# Make in-loop variables
+			temp_current = current
+			temp_available = available
+			temp_history = history
+			temp_player = player
 
-			if player = "X":
-				player = "O"
+			# Add move to current & history, make unavailable
+			temp_current[legal[k]-1] = temp_player
+			temp_history.append(temp_available.pop(k-1))
+
+			# Switch turns
+			if temp_player = "X":
+				temp_player = "O"
 			else:
-				player = "X"
+				temp_player = "X"
 
-			game(current, available, history, player)
+			# Recursively create a new game with these features
+			game(temp_current, temp_available, temp_history, temp_player)
 			
