@@ -75,18 +75,65 @@ def check_win(board): # returns if the game has been won, and if so, by whom
 		return False, None
 """
 
-def checkmate():
+def checkmate(current, available, player): # checkmate() = (boolean, list)
+
+	win_conditions = [[1,2,3], [1,4,7], [1,5,9], [2,5,8], [3,5,7], [3,6,9], [4,5,6], [7,8,9]]
+	
+	if player == "X":
+		opponent = "O"
+	else:
+		opponent = "X"
+
+	opponent_property = []
+
+	for i in range(0,len(current)):
+		if current[i] = opponent:
+			opponent_property.append(i+1)
+
+	checks = 0
+	available_space = []
+
+	# now we have a list of opponent properties and available properties
+	for i in range(0, len(win_conditions)):
+		in_a_row = 0
+		num_available = 0
+		for j in range(0, len(win_conditions[i])):
+			if win_conditions[i][j] in opponent_property:
+				in_a_row += 1
+			elif win_conditions[i][j] in available:
+				num_available += 1
+			
+			if in_a_row == 2 and num_available == 1:
+				checks += 1
+
+	if checks == 0:
+		return False, available
+	elif checks == 1:
+		return False, [something subset of available]
+	else:
+		# if the available is the center:
+			return False, [5]
+		else:
+			return True, []
+
+	# you're in check if the opponent has 2 of the 3 of any of the win conditions and the 3rd is available
+	# count the number of times this is true
+	# if 0: false
+	# if 1: false, but you have to take that space
+	# if >1: true, unless you can escape both via the center space (5)
 	pass
 
-def legal_moves(current, available, player):
+def legal_moves(current, available, player): # legal_moves() = [*int]
+	# a legal move has to be in available, which we know is at least 1 move
 	pass
 
-def game(current, available, history, player): # game() = (winner, history)
-
+def game(current, available, history, player): # game() = (string, list)
+	check_check = checkmate(current, available, player)
+	
 	# Check if game is over	
 	if len(available) == 0:
 		return "draw", history
-	elif checkmate():
+	elif check_check[0]:
 		if player == "X":
 			winner = "O"
 		else:
@@ -95,7 +142,7 @@ def game(current, available, history, player): # game() = (winner, history)
 	else:
 
 		# Get the set of all possible legal moves
-		legal = legal_moves()
+		legal = check_check[1]: # at the moment this is called twice
 		for k in range(0,len(legal)):
 			
 			# Make in-loop variables
